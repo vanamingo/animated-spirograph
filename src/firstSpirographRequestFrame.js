@@ -3,32 +3,28 @@ export default draw;
 function draw() {
     // Get drawing context
     var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-
+    var lineContext = canvas.getContext('2d');
+    const pointContext = document.getElementById('canvas2').getContext('2d');
     // Draw spirograph
-    drawSpirograph(context, canvas.width / 2, canvas.height / 2, 200, 50, 10);
+    
+    drawSpirograph(lineContext, pointContext, canvas.width / 2, canvas.height / 2, 200, 55, 200);
 
-
-   const context2 = document.getElementById('canvas2').getContext('2d');
-   context2.beginPath();
-   context2.lineWidth = 15;
-    context2.arc(400, 400, 150, 0, Math.PI);
-    context2.lineJoin = context2.lineCap = 'round';
-    context2.stroke();
-    context2.closePath();
 }
 
 
-function drawSpirograph(context, cx, cy, radius1, radius2, ratio) {
+function drawSpirograph(lineContext, pointContext, cx, cy, radius1, radius2, ratio) {
+
+
+
     var x, y, theta;
 
     // Move to starting point (theta = 0)
-    context.beginPath();
-    context.lineWidth = 3;
-    //context.lineJoin = context.lineCap = 'round';
-    //context.shadowBlur = 1;
+    lineContext.beginPath();
+    lineContext.lineWidth = 1;
+    lineContext.lineJoin = lineContext.lineCap = 'round';
+    lineContext.shadowBlur = 0.3;
     //context.shadowColor = 'rgb(0, 0, 0)';
-    context.moveTo(cx + radius1 + radius2, cy);
+    lineContext.moveTo(cx + radius1 + radius2, cy);
     //context.closePath();
 
      theta = 0;
@@ -49,13 +45,57 @@ function drawSpirograph(context, cx, cy, radius1, radius2, ratio) {
         //context.beginPath();
         x = cx + radius1 * Math.cos(theta) + radius2 * Math.cos(theta * ratio);
         y = cy + radius1 * Math.sin(theta) + radius2 * Math.sin(theta * ratio);
-        context.lineJoin = context.lineCap = 'round';
-        context.lineTo(x, y);
-        context.stroke();
+        lineContext.lineJoin = lineContext.lineCap = 'round';
+        lineContext.lineTo(x, y);
+        lineContext.stroke();
        // context.closePath();
 
         theta += 0.01;
+
+        drawPointAndCircles(x,y);
+
         window.requestAnimationFrame(drawFrame);
+    }
+
+
+    function drawPointAndCircles(x, y){
+        pointContext.clearRect(0, 0, 1000, 600);
+
+        pointContext.strokeStyle = 'red';
+        pointContext.beginPath();
+        pointContext.arc(x, y, 5, 0, 2 * Math.PI);
+        pointContext.stroke();
+
+        drawCircles(x, y);
+    }
+
+    function drawCircles(x, y){
+        pointContext.strokeStyle = 'gray';
+        pointContext.beginPath();
+        pointContext.arc(cx, cy, radius1-radius2, 0, 2 * Math.PI);
+        pointContext.stroke();
+
+        var x1 = cx + radius1 * Math.cos(theta);
+        var y2 = cy + radius1 * Math.sin(theta);
+        
+        pointContext.beginPath();
+        pointContext.arc(x1, y2, radius2, 0, 2 * Math.PI);
+        pointContext.stroke();
+
+
+        var x1 = cx + radius1 * Math.cos(theta);
+        var y1 = cy + radius1 * Math.sin(theta);
+
+
+        var x2 = cx + radius1 * Math.cos(theta) + radius2 * Math.cos(theta * ratio);
+        var y2 = cy + radius1 * Math.sin(theta) + radius2 * Math.sin(theta * ratio);
+        
+        pointContext.beginPath();
+        pointContext.strokeStyle = 'red';
+        pointContext.moveTo(x1, y1);
+        pointContext.lineTo(x2, y2);
+        pointContext.stroke();
+
     }
     
 }
