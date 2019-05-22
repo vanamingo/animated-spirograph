@@ -7,7 +7,7 @@ function draw() {
     const pointContext = document.getElementById('canvas2').getContext('2d');
     // Draw spirograph
     
-    drawSpirograph(lineContext, pointContext, canvas.width / 2, canvas.height / 2, 200, 55, 200);
+    drawSpirograph(lineContext, pointContext, canvas.width / 2, canvas.height / 2, 200, 55, 5.3);
 
 }
 
@@ -39,7 +39,7 @@ function drawSpirograph(lineContext, pointContext, cx, cy, radius1, radius2, rat
     drawFrame();
 
     function drawFrame(){
-        if( theta > Math.PI * 2){
+        if( theta > Math.PI * 20){
             return;
         }
         //context.beginPath();
@@ -51,6 +51,9 @@ function drawSpirograph(lineContext, pointContext, cx, cy, radius1, radius2, rat
        // context.closePath();
 
         theta += 0.01;
+
+      //  radius1 += 0.02;
+      //  radius2 -= 0.02;
 
         drawPointAndCircles(x,y);
 
